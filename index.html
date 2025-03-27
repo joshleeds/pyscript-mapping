@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Excel Column Classification</title>
+
+  <!-- Load your compiled Tailwind CSS -->
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- PyScript dependencies -->
+  <link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" />
+  <script defer src="https://pyscript.net/latest/pyscript.js"></script>
+
+  <!-- PyScript configuration: Load pandas -->
+  <py-config>
+    packages = ["pandas", "numpy", "openpyxl"]
+  </py-config>
+</head>
+<body class="bg-gray-100 text-gray-800 min-h-screen flex flex-col items-center justify-center p-8">
+
+  <h1 class="text-4xl font-bold text-blue-600 mb-6 text-center">📄 PyScript CSV Editor</h1>
+
+  <div class="w-full max-w-md bg-white rounded-xl shadow-lg p-6 space-y-4">
+    <input id="csv-upload" type="file" class="w-full border border-gray-300 p-2 rounded" />
+    <button id="process-btn" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded transition">
+      Process CSV
+    </button>
+    <div id="output" class="text-center mt-4"></div>
+  </div>
+
+  <!-- Load your PyScript logic -->
+  <py-script src="main.py"></py-script>
+
+</body>
+</html>
