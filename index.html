@@ -20,10 +20,17 @@
 
   <div class="w-full max-w-md bg-white rounded-xl shadow-lg p-6 space-y-4">
     <input id="excel-upload" type="file" class="w-full border border-gray-300 p-2 rounded" />
-    <button id="process-btn" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded transition">
-      Process CSV
+    <button id="process-btn" disabled
+      class="w-full bg-gray-300 text-gray-500 py-2 rounded transition cursor-not-allowed">
+      Process Input File
     </button>
-    <div id="output" class="text-center mt-4"></div>
+    <div id="output" class="text-center mt-4">
+      <button id="download-link"
+          disabled
+          class="w-full bg-gray-300 text-gray-500 py-2 rounded cursor-not-allowed transition">
+        Download Processed File
+      </button>
+    </div>
   </div>
 
   <!-- Load your PyScript logic -->
