@@ -6,6 +6,15 @@ from pyodide.ffi import create_proxy
 from openpyxl import Workbook
 from openpyxl.styles import PatternFill
 from openpyxl.utils import get_column_letter
+import warnings
+from js import window
+
+if window.location.hostname in ["localhost", "127.0.0.1"]:
+    # Development mode
+    warnings.filterwarnings("default")
+else:
+    # Production mode (e.g. on vercel or other domains)
+    warnings.filterwarnings("ignore")
 
 console.log("Script loaded and running...")
 
