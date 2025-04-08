@@ -3,6 +3,9 @@ import numpy as np
 from js import document, FileReader, console, Blob, URL, Uint8Array 
 from io import StringIO, BytesIO
 from pyodide.ffi import create_proxy
+from openpyxl import Workbook
+from openpyxl.styles import PatternFill
+from openpyxl.utils import get_column_letter
 
 console.log("Script loaded and running...")
 
@@ -51,10 +54,39 @@ def handle_upload(event):
         console.log(f"Number of null values in Classification column: {count_null}")
         console.log(f"Number of rows in the data: {df.shape[0]}")
 
+        ##Highlight the null values in the Classification column
+        def highlight_and_style(df):
+            yellow_fill = PatternFill(start_color="FFFF00", end_color="FFFF00", fill_type="solid")
+            wb = Workbook()
+            ws = wb.active
+            ws.append(list(df.columns))
+
+            for row in df.itertuples(index=False):
+                ws.append(row)
+                if pd.isnull(row.Classification):
+                    for col in range(1, len(df.columns) + 1):
+                        ws.cell(row=ws.max_row, column=col).fill = yellow_fill
+
+            # Adjust column widths
+            for col_idx, col in enumerate(ws.iter_cols(min_row=1, max_row=ws.max_row), start=1):
+                max_length = 0
+                for cell in col:
+                    try:
+                        max_length = max(max_length, len(str(cell.value)))
+                    except:
+                        pass
+                ws.column_dimensions[get_column_letter(col_idx)].width = max_length
+
+            buffer = BytesIO()
+            wb.save(buffer)
+            return buffer.getvalue()
+        
+        output_data = highlight_and_style(df)
+
         # Convert the DataFrame to a excel string
-        excel_buffer = BytesIO()
-        df.to_excel(excel_buffer, index=False, engine='openpyxl')
-        output_data = excel_buffer.getvalue()  # Get the binary content
+        # excel_buffer = BytesIO()
+        # df.to_excel(excel_buffer, index=False, engine='openpyxl')
+        # output_data = excel_buffer.getvalue()  # Get the binary content
         console.log(f"Excel data size: {len(output_data)} bytes")
         
         # Create a Blob and a downloadable link
