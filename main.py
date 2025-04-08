@@ -1,13 +1,12 @@
 import pandas as pd
 import numpy as np
-from js import document, FileReader, console, Blob, URL, Uint8Array 
+from js import document, FileReader, console, Blob, URL, Uint8Array,window 
 from io import StringIO, BytesIO
 from pyodide.ffi import create_proxy
 from openpyxl import Workbook
 from openpyxl.styles import PatternFill
 from openpyxl.utils import get_column_letter
 import warnings
-from js import window
 
 if window.location.hostname in ["localhost", "127.0.0.1"]:
     # Development mode
