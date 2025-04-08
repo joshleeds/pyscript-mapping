@@ -22,6 +22,16 @@ def allow_click(event):
         process_btn.classList.remove("bg-blue-600", "hover:bg-blue-700", "text-white")
         process_btn.classList.add("bg-gray-300", "text-gray-500", "cursor-not-allowed")
 
+def remove_file(event):
+    file_input = document.getElementById("excel-upload")
+    remove_button = document.getElementById("remove-file-btn")
+    file_input.value = ""
+    process_btn = document.getElementById("process-btn")
+    process_btn.disabled = True
+    process_btn.classList.remove("bg-blue-600", "hover:bg-blue-700", "text-white")
+    process_btn.classList.add("bg-gray-300", "text-gray-500", "cursor-not-allowed")
+
+
 def handle_upload(event):
     console.log("Uploading file...")
     file = document.getElementById('excel-upload').files.item(0)
@@ -35,7 +45,16 @@ def handle_upload(event):
              df = pd.read_csv(StringIO(file_content.decode('utf-8')))
         elif file.name.endswith(('.xls', '.xlsx')):
             binary_data = memoryview(file_content.to_py())  # convert JsProxy to Python bytes-like object
-            df = pd.read_excel(BytesIO(binary_data), sheet_name=0)
+            excel_io = BytesIO(binary_data)
+            sheet_names = pd.ExcelFile(excel_io).sheet_names
+            ##Pick the sheet name 
+            if "Transactions" in sheet_names:
+                read_sheet = "Transactions"
+            else:
+                read_sheet = sheet_names[0]
+            console.log(f"Reading sheet: {read_sheet}")
+            excel_io.seek(0)  # Reset the pointer to the start of the BytesIO object 
+            df = pd.read_excel(excel_io, sheet_name=0)
         else:
             raise ValueError("Unsupported file format. Please upload a CSV or Excel file.")
         
@@ -59,6 +78,7 @@ def handle_upload(event):
             yellow_fill = PatternFill(start_color="FFFF00", end_color="FFFF00", fill_type="solid")
             wb = Workbook()
             ws = wb.active
+            ws.title = "Transactions"
             ws.append(list(df.columns))
 
             for row in df.itertuples(index=False):
@@ -121,4 +141,7 @@ def handle_upload(event):
 # Also wrap the outer handler in a proxy
 document.getElementById("excel-upload").addEventListener("change", create_proxy(allow_click))
 document.getElementById("process-btn").addEventListener("click", create_proxy(handle_upload))
+document.getElementById("remove-file-btn").addEventListener("click", create_proxy(remove_file))
+
+
 

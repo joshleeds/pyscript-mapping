@@ -21,7 +21,13 @@
   <h1 class="text-4xl font-bold text-blue-600 mb-6 text-center">Excel File Data Classification</h1>
 
   <div class="w-full max-w-md bg-white rounded-xl shadow-lg p-6 space-y-4">
-    <input id="excel-upload" type="file" class="w-full border border-gray-300 p-2 rounded" />
+    <div class="flex items-center space-x-2">
+      <input id="excel-upload" type="file" class="w-full border border-gray-300 p-2 rounded" />
+      <button id="remove-file-btn" 
+        class="bg-red-500 text-white px-3 py-2 rounded hover:bg-red-600 transition">
+        Remove
+      </button>
+    </div>
     <button id="process-btn" 
       disabled
       class="w-full bg-gray-300 text-gray-500 py-2 rounded transition cursor-not-allowed">
